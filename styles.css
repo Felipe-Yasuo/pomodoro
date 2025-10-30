@@ -77,9 +77,10 @@ header {
 .controls {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 30px;
     margin-bottom: 12px;
 }
+
 
 .controls button {
     background: none;
