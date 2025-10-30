@@ -8,7 +8,8 @@ let timeLeft = 0.1 * 60;
 let isRunning = false;
 let timerInterval = null;
 let history = JSON.parse(localStorage.getItem('pomodoroHistory')) || [];
-
+let sessionType = 'focus';
+let completedPomodoros = 0;
 
 function updateDisplay() {
     const minutes = Math.floor(timeLeft / 60);
@@ -24,13 +25,11 @@ function toggleTimer() {
         // Pausa o timer
         clearInterval(timerInterval);
         isRunning = false;
-        playImage.src = './assets/ButtonPlay.svg';
-        playImage.alt = 'Iniciar';
+        setPlayIcon();
     } else {
         // Inicia o timer
         isRunning = true;
-        playImage.src = './assets/ButtonPause.svg';
-        playImage.alt = 'Pausar';
+        setPauseIcon();
 
         timerInterval = setInterval(() => {
             if (timeLeft > 0) {
@@ -39,9 +38,27 @@ function toggleTimer() {
             } else {
                 clearInterval(timerInterval);
                 isRunning = false;
-                playImage.src = './assets/ButtonPlay.svg';
-                playImage.alt = 'Iniciar';
 
+                if (sessionType === 'focus') {
+                    completedPomodoros++;
+                    addCycleToHistory(completedPomodoros);
+                    pomodoroCount.textContent = `Pomodoros: ${completedPomodoros}/4`;
+
+                    sessionType = 'break';
+                    timeLeft = 5 * 60;
+                    changeTheme('break');
+                    changeButtons('break');
+                    setPlayIcon();
+                } else {
+                    sessionType = 'focus';
+                    timeLeft = 25 * 60;
+                    changeTheme('focus');
+                    changeButtons('focus');
+                    setPlayIcon();
+                    console.log("💪 Voltando ao foco");
+                }
+
+                updateDisplay();
             }
         }, 1000);
     }
@@ -53,10 +70,7 @@ function resetTimer() {
     timeLeft = 25 * 60;
     updateDisplay();
 
-
-    const playImage = startPauseBtn.querySelector('img');
-    playImage.src = './assets/ButtonPlay.svg';
-    playImage.alt = 'Iniciar';
+    setPlayIcon();
 }
 
 function renderHistory() {
@@ -93,12 +107,39 @@ function skipSession() {
     saveHistory();
     renderHistory();
 
-    timeLeft = 25 * 60;
-    updateDisplay();
+    if (sessionType === 'focus') {
 
-    const playImage = startPauseBtn.querySelector('img');
-    playImage.src = './assets/ButtonPlay.svg';
-    playImage.alt = 'Iniciar';
+        sessionType = 'break';
+        timeLeft = 5 * 60;
+        changeTheme('break');
+        changeButtons('break');
+    } else {
+
+        sessionType = 'focus';
+        timeLeft = 25 * 60;
+        changeTheme('focus');
+        changeButtons('focus');
+    }
+    updateDisplay();
+    setPlayIcon();
+    console.log("⏭️ Ciclo atual pulado!");
+}
+
+function addCycleToHistory(cycleNumber) {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    const entry = {
+        icon: '✅',
+        message: `${cycleNumber}° Ciclo concluído`,
+        time: `${hours}:${minutes}`
+    };
+
+    history.push(entry);
+    saveHistory();
+    renderHistory();
+
 }
 
 
@@ -107,6 +148,56 @@ function clearHistory() {
     saveHistory();
     renderHistory();
 }
+
+function changeTheme(mode) {
+    const root = document.documentElement;
+
+    if (mode === 'break') {
+        root.style.setProperty('--bg-color-pink', '#D6F8D6');
+        root.style.setProperty('--panel-color-pink', '#A8E6A1');
+        root.style.setProperty('--text-color-pink', '#1B4D1B');
+        root.style.setProperty('--button-color-pink', '#A8E6A166');
+    } else {
+        root.style.setProperty('--bg-color-pink', '#FFE8E8');
+        root.style.setProperty('--panel-color-pink', '#F9B6B6');
+        root.style.setProperty('--text-color-pink', '#471515');
+        root.style.setProperty('--button-color-pink', '#FF4C4C26');
+    }
+}
+
+function setPlayIcon() {
+    const img = startPauseBtn.querySelector('img');
+    const isBreak = sessionType === 'break';
+    img.src = isBreak ? './assets/ButtonPlayGreen.svg' : './assets/ButtonPlay.svg';
+    img.alt = 'Iniciar';
+}
+
+function setPauseIcon() {
+    const img = startPauseBtn.querySelector('img');
+    const isBreak = sessionType === 'break';
+    img.src = isBreak ? './assets/ButtonPauseGreen.svg' : './assets/ButtonPause.svg';
+    img.alt = 'Pausar';
+}
+
+function changeButtons(mode) {
+    const playImage = startPauseBtn.querySelector('img');
+    const resetImage = resetBtn.querySelector('img');
+    const skipImage = skipBtn.querySelector('img');
+    const session = sessionLabel.querySelector('img');
+
+    if (mode === 'break') {
+        playImage.src = './assets/ButtonPlayGreen.svg';
+        resetImage.src = './assets/ButtonResetGreen.svg';
+        skipImage.src = './assets/ButtonNextGreen.svg';
+        session.src = './assets/ShortBreak.svg';
+    } else {
+        playImage.src = './assets/ButtonPlay.svg';
+        resetImage.src = './assets/ButtonReset.svg';
+        skipImage.src = './assets/ButtonNext.svg';
+        session.src = './assets/ShortBreak.svg';
+    }
+}
+
 
 
 
