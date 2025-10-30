@@ -100,32 +100,42 @@ function skipSession() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
-
-    const entry = {
-        message: 'Ciclo pulado',
-        time: `${hours}:${minutes}`
-    };
-
-    history.push(entry);
-    saveHistory();
-    renderHistory();
-
     if (sessionType === 'focus') {
+        completedPomodoros++;
+        pomodoroCountEl.textContent = `Pomodoros: ${completedPomodoros}/4`;
+
+        const entry = {
+            icon: '✅',
+            message: `${completedPomodoros}° Ciclo concluído (pulado)`,
+            time: `${hours}:${minutes}`
+        };
+        history.push(entry);
+        saveHistory();
+        renderHistory();
 
         sessionType = 'break';
         timeLeft = 5 * 60;
         changeTheme('break');
         changeButtons('break');
+        setPlayIcon();
     } else {
+        const entry = {
+            icon: '⏭️',
+            message: 'Descanso pulado',
+            time: `${hours}:${minutes}`
+        };
+        history.push(entry);
+        saveHistory();
+        renderHistory();
 
         sessionType = 'focus';
         timeLeft = 25 * 60;
         changeTheme('focus');
         changeButtons('focus');
+        setPlayIcon();
     }
+
     updateDisplay();
-    setPlayIcon();
-    console.log("⏭️ Ciclo atual pulado!");
 }
 
 function addCycleToHistory(cycleNumber) {
