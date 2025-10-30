@@ -2,12 +2,58 @@
 <html lang="pt-BR">
 
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timer Pomodoro</title>
+    <title>Pomodoro Timer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
+    <header class="container">
+        <h1>Pomodo Timer</h1>
+    </header>
+    <main class="container main-layout">
+        <div class="timer-wrapper">
+            <section class="panel timer-panel">
+                <h2 id="sessionLabel">
+                    <img src="./assets/Chip.svg" alt="">
+                </h2>
+                <div class="timer">
+                    <span>25:00</span>
+                </div>
+
+                <div class="controls">
+                    <button id="resetBtn">
+                        <img src="./assets/ButtonConfig.svg" alt="">
+                    </button>
+                    <button id="startPauseBtn">
+                        <img src="./assets/ButtonPlay.svg" alt="">
+                    </button>
+                    <button id="skipBtn">
+                        <img src="./assets/ButtonNext.svg" alt="">
+                    </button>
+                </div>
+
+                <div class="progress">
+                    <span id="pomodoroCount">Pomodoros: 0/4</span>
+                </div>
+            </section>
+        </div>
+
+        <aside class="panel history-panel">
+            <h2>Histórico</h2>
+            <div class="history-controls">
+                <button id="clearHistoryBtn">🗑️ Limpar histórico</button>
+            </div>
+            <ul id="historyList" class="history" aria-live="polite"></ul>
+        </aside>
+    </main>
+
+
 
 </body>
 
