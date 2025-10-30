@@ -1,5 +1,6 @@
 const timeDisplay = document.querySelector('.timer span');
 const startPauseBtn = document.querySelector('#startPauseBtn');
+const resetBtn = document.querySelector('#resetBtn');
 
 let timeLeft = 25 * 60;
 let isRunning = false;
@@ -41,5 +42,20 @@ function toggleTimer() {
         }, 1000);
     }
 }
+
+function resetTimer() {
+    clearInterval(timerInterval);
+    isRunning = false;
+    timeLeft = 25 * 60;
+    updateDisplay();
+
+
+    const playImage = startPauseBtn.querySelector('img');
+    playImage.src = './assets/ButtonPlay.svg';
+    playImage.alt = 'Iniciar';
+
+}
+
 updateDisplay();
 startPauseBtn.addEventListener('click', toggleTimer);
+resetBtn.addEventListener('click', resetTimer);
