@@ -3,6 +3,10 @@ const startPauseBtn = document.querySelector('#startPauseBtn');
 const resetBtn = document.querySelector('#resetBtn');
 const skipBtn = document.querySelector('#skipBtn');
 const clearHistoryBtn = document.querySelector('#clearHistoryBtn');
+const pomodoroCountEl = document.querySelector('#pomodoroCount');
+const historyList = document.querySelector('#historyList');
+const sessionLabelImg = document.querySelector('#sessionLabel img');
+
 
 let timeLeft = 0.1 * 60;
 let isRunning = false;
@@ -42,7 +46,7 @@ function toggleTimer() {
                 if (sessionType === 'focus') {
                     completedPomodoros++;
                     addCycleToHistory(completedPomodoros);
-                    pomodoroCount.textContent = `Pomodoros: ${completedPomodoros}/4`;
+                    pomodoroCountEl.textContent = `Pomodoros: ${completedPomodoros}/4`;
 
                     sessionType = 'break';
                     timeLeft = 5 * 60;
@@ -55,7 +59,6 @@ function toggleTimer() {
                     changeTheme('focus');
                     changeButtons('focus');
                     setPlayIcon();
-                    console.log("💪 Voltando ao foco");
                 }
 
                 updateDisplay();
@@ -180,21 +183,17 @@ function setPauseIcon() {
 }
 
 function changeButtons(mode) {
-    const playImage = startPauseBtn.querySelector('img');
     const resetImage = resetBtn.querySelector('img');
     const skipImage = skipBtn.querySelector('img');
-    const session = sessionLabel.querySelector('img');
 
     if (mode === 'break') {
-        playImage.src = './assets/ButtonPlayGreen.svg';
         resetImage.src = './assets/ButtonResetGreen.svg';
         skipImage.src = './assets/ButtonNextGreen.svg';
-        session.src = './assets/ShortBreak.svg';
+        if (sessionLabelImg) sessionLabelImg.src = './assets/ShortBreak.svg';
     } else {
-        playImage.src = './assets/ButtonPlay.svg';
         resetImage.src = './assets/ButtonReset.svg';
         skipImage.src = './assets/ButtonNext.svg';
-        session.src = './assets/ShortBreak.svg';
+        if (sessionLabelImg) sessionLabelImg.src = './assets/Chip.svg';
     }
 }
 
