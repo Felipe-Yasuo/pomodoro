@@ -1,6 +1,7 @@
 const timeDisplay = document.querySelector('.timer span');
 const startPauseBtn = document.querySelector('#startPauseBtn');
 const resetBtn = document.querySelector('#resetBtn');
+const skipBtn = document.querySelector('#skipBtn');
 
 let timeLeft = 25 * 60;
 let isRunning = false;
@@ -53,9 +54,29 @@ function resetTimer() {
     const playImage = startPauseBtn.querySelector('img');
     playImage.src = './assets/ButtonPlay.svg';
     playImage.alt = 'Iniciar';
+}
+
+
+function skipSession() {
+    clearInterval(timerInterval);
+    isRunning = false;
+
+    const li = document.createElement('li');
+    const now = new Date();
+    li.textContent = `Ciclo pulado às ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+    historyList.prepend(li);
+
+    timeLeft = 25 * 60;
+    updateDisplay();
+
+    const playImage = startPauseBtn.querySelector('img');
+    playImage.src = './assets/ButtonPlay.svg';
+    playImage.alt = 'Iniciar';
 
 }
+
 
 updateDisplay();
 startPauseBtn.addEventListener('click', toggleTimer);
 resetBtn.addEventListener('click', resetTimer);
+skipBtn.addEventListener('click', skipSession);
