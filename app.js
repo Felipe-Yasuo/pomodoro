@@ -7,8 +7,12 @@ const pomodoroCountEl = document.querySelector('#pomodoroCount');
 const historyList = document.querySelector('#historyList');
 const sessionLabelImg = document.querySelector('#sessionLabel img');
 
-
-let timeLeft = 25 * 60;
+const DURATIONS = {
+    focus: 25 * 60,
+    break: 5 * 60,
+    longBreak: 15 * 60,
+};
+let timeLeft = DURATIONS.focus;
 let isRunning = false;
 let timerInterval = null;
 
@@ -59,17 +63,13 @@ function toggleTimer() {
 
 
                         sessionType = 'break';
-                        timeLeft = 5 * 60;
-                        changeTheme('break');
-                        changeButtons('break');
-                        setPlayIcon();
+                        timeLeft = DURATIONS.break;
+                        applySessionChanges('break');
                     } else {
 
                         sessionType = 'longBreak';
-                        timeLeft = 15 * 60;
-                        changeTheme('longBreak');
-                        changeButtons('longBreak');
-                        setPlayIcon();
+                        timeLeft = DURATIONS.longBreaks;
+                        applySessionChanges('longBreak');
 
 
                         const now = new Date();
@@ -87,10 +87,8 @@ function toggleTimer() {
                     const previousType = sessionType;
 
                     sessionType = 'focus';
-                    timeLeft = 25 * 60;
-                    changeTheme('focus');
-                    changeButtons('focus');
-                    setPlayIcon();
+                    timeLeft = DURATIONS.focus;
+                    applySessionChanges('focus');
 
 
                     if (previousType === 'longBreak') {
@@ -108,16 +106,19 @@ function resetTimer() {
     isRunning = false;
 
     if (sessionType === 'focus') {
-        timeLeft = 25 * 60;
+        timeLeft = DURATIONS.focus;
     } else if (sessionType === 'break') {
-        timeLeft = 5 * 60;
+        timeLeft = DURATIONS.break;
     } else if (sessionType === 'longBreak') {
-        timeLeft = 15 * 60;
+        timeLeft = DURATIONS.longBreak;
     }
 
     updateDisplay();
+    updatePomodoroCountUI();
     setPlayIcon();
 }
+
+
 
 function renderHistory() {
     historyList.innerHTML = '';
@@ -161,15 +162,13 @@ function skipSession() {
 
 
             sessionType = 'break';
-            timeLeft = 5 * 60;
-            changeTheme('break');
-            changeButtons('break');
+            timeLeft = DURATIONS.break;
+            applySessionChanges('break');
         } else {
 
             sessionType = 'longBreak';
-            timeLeft = 15 * 60;
-            changeTheme('longBreak');
-            changeButtons('longBreak');
+            timeLeft = DURATIONS.longBreak;
+            applySessionChanges('longBreak');
 
             history.push({
                 message: '☕ Descanso longo iniciado (pulado)',
@@ -187,9 +186,8 @@ function skipSession() {
         renderHistory();
 
         sessionType = 'focus';
-        timeLeft = 25 * 60;
-        changeTheme('focus');
-        changeButtons('focus');
+        timeLeft = DURATIONS.focus;
+        applySessionChanges('focus');
     } else if (sessionType === 'longBreak') {
         history.push({
             message: 'Descanso longo pulado — novo ciclo iniciado',
@@ -198,14 +196,12 @@ function skipSession() {
         saveHistory();
         renderHistory();
 
-        // 🔁 Reinicia o contador de ciclos aqui
         sessionType = 'focus';
-        timeLeft = 25 * 60;
+        timeLeft = DURATIONS.focus;
         setProgress = 1;
         updatePomodoroCountUI();
 
-        changeTheme('focus');
-        changeButtons('focus');
+        applySessionChanges('focus');
     }
 
     setPlayIcon();
@@ -241,20 +237,20 @@ function changeTheme(mode) {
     const root = document.documentElement;
 
     if (mode === 'break') {
-        root.style.setProperty('--bg-color-pink', '#D6F8D6');
-        root.style.setProperty('--panel-color-pink', '#A8E6A1');
-        root.style.setProperty('--text-color-pink', '#1B4D1B');
-        root.style.setProperty('--button-color-pink', '#A8E6A166');
+        root.style.setProperty('--bg-color', '#D6F8D6');
+        root.style.setProperty('--panel-color', '#A8E6A1');
+        root.style.setProperty('--text-color', '#1B4D1B');
+        root.style.setProperty('--button-color', '#A8E6A166');
     } else if (mode === 'longBreak') {
-        root.style.setProperty('--bg-color-pink', '#D6E8FF');
-        root.style.setProperty('--panel-color-pink', '#A5C8FF');
-        root.style.setProperty('--text-color-pink', '#142B5E');
-        root.style.setProperty('--button-color-pink', '#A5C8FF66');
+        root.style.setProperty('--bg-color', '#D6E8FF');
+        root.style.setProperty('--panel-color', '#A5C8FF');
+        root.style.setProperty('--text-color', '#142B5E');
+        root.style.setProperty('--button-color', '#A5C8FF66');
     } else {
-        root.style.setProperty('--bg-color-pink', '#FFE8E8');
-        root.style.setProperty('--panel-color-pink', '#F9B6B6');
-        root.style.setProperty('--text-color-pink', '#471515');
-        root.style.setProperty('--button-color-pink', '#FF4C4C26');
+        root.style.setProperty('--bg-color', '#FFE8E8');
+        root.style.setProperty('--panel-color', '#F9B6B6');
+        root.style.setProperty('--text-color', '#471515');
+        root.style.setProperty('--button-color', '#FF4C4C26');
     }
 }
 
@@ -299,6 +295,15 @@ function changeButtons(mode) {
         if (sessionLabelImg) sessionLabelImg.src = './assets/Chip.svg';
     }
 }
+
+function applySessionChanges(mode) {
+    changeTheme(mode);
+    changeButtons(mode);
+    setPlayIcon();
+    updateDisplay();
+}
+
+
 
 updateDisplay();
 startPauseBtn.addEventListener('click', toggleTimer);

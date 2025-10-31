@@ -5,16 +5,16 @@
 }
 
 :root {
-    --bg-color-pink: #FFE8E8;
-    --text-color-pink: #471515;
-    --button-color-pink: #FF4C4C26;
-    --panel-color-pink: #F9B6B6;
+    --bg-color: #FFE8E8;
+    --text-color: #471515;
+    --button-color: #FF4C4C26;
+    --panel-color: #F9B6B6;
 }
 
 body {
     font-family: "Roboto Flex", sans-serif;
-    background-color: var(--bg-color-pink);
-    color: var(--text-color-pink);
+    background-color: var(--bg-color);
+    color: var(--text-color);
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -46,7 +46,7 @@ header {
 
 
 .timer-panel {
-    background: var(--panel-color-pink);
+    background: var(--panel-color);
     border-radius: 20px;
     padding: 40px;
     width: 500px;
@@ -58,7 +58,7 @@ header {
 .history-panel {
     grid-column: 3;
     justify-self: end;
-    background: var(--panel-color-pink);
+    background: var(--panel-color);
     border-radius: 16px;
     padding: 20px;
     width: 280px;
