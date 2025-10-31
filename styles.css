@@ -9,6 +9,7 @@
     --text-color: #471515;
     --button-color: #FF4C4C26;
     --panel-color: #F9B6B6;
+    --clear-btn-color: #FF6B6B;
 }
 
 body {
@@ -132,7 +133,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #ffbaba55;
+    background: var(--button-color);
     border-radius: 8px;
     padding: 10px 14px;
     margin-bottom: 8px;
@@ -146,7 +147,7 @@ header {
     padding: 10px 16px;
     border: none;
     border-radius: 8px;
-    background-color: var(--button-color-pink);
+    background-color: var(--clear-btn-color);
     color: white;
     cursor: pointer;
     font-weight: bold;

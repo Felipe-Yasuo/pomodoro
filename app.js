@@ -179,7 +179,7 @@ function skipSession() {
         }
     } else if (sessionType === 'break') {
         history.push({
-            message: 'Descanso curto pulado',
+            message: '⏰ Descanso curto pulado',
             time: `${hh}:${mm}`
         });
         saveHistory();
@@ -241,16 +241,19 @@ function changeTheme(mode) {
         root.style.setProperty('--panel-color', '#A8E6A1');
         root.style.setProperty('--text-color', '#1B4D1B');
         root.style.setProperty('--button-color', '#A8E6A166');
+        root.style.setProperty('--clear-btn-color', '#6FD96F');
     } else if (mode === 'longBreak') {
         root.style.setProperty('--bg-color', '#D6E8FF');
         root.style.setProperty('--panel-color', '#A5C8FF');
         root.style.setProperty('--text-color', '#142B5E');
         root.style.setProperty('--button-color', '#A5C8FF66');
+        root.style.setProperty('--clear-btn-color', '#5A8DFF');
     } else {
         root.style.setProperty('--bg-color', '#FFE8E8');
         root.style.setProperty('--panel-color', '#F9B6B6');
         root.style.setProperty('--text-color', '#471515');
         root.style.setProperty('--button-color', '#FF4C4C26');
+        root.style.setProperty('--clear-btn-color', '#FF6B6B');
     }
 }
 
