@@ -95,10 +95,9 @@ function toggleTimer() {
 
                     if (previousType === 'longBreak') {
                         setProgress = 1;
-                        updatePomodoroCountUI();
                     }
                 }
-
+                updatePomodoroCountUI();
                 updateDisplay();
             }
         }, 1000);
@@ -142,7 +141,6 @@ function skipSession() {
         completedPomodoros++;
 
         history.push({
-            icon: '✅',
             message: `${completedPomodoros}° Ciclo concluído (pulado)`,
             time: `${hh}:${mm}`
         });
@@ -173,30 +171,38 @@ function skipSession() {
             saveHistory();
             renderHistory();
         }
-    } else {
-
+    } else if (sessionType === 'break') {
         history.push({
-            message: 'Descanso pulado',
+            message: 'Descanso curto pulado',
             time: `${hh}:${mm}`
         });
         saveHistory();
         renderHistory();
 
-
         sessionType = 'focus';
         timeLeft = 25 * 60;
         changeTheme('focus');
         changeButtons('focus');
+    } else if (sessionType === 'longBreak') {
+        history.push({
+            message: 'Descanso longo pulado — novo ciclo iniciado',
+            time: `${hh}:${mm}`
+        });
+        saveHistory();
+        renderHistory();
 
-        if (sessionType === 'longBreak') {
-            setProgress = 1;
-            updatePomodoroCountUI();
-        }
+        // 🔁 Reinicia o contador de ciclos aqui
+        sessionType = 'focus';
+        timeLeft = 25 * 60;
+        setProgress = 1;
+        updatePomodoroCountUI();
+
+        changeTheme('focus');
+        changeButtons('focus');
     }
 
     setPlayIcon();
     updateDisplay();
-    console.log("⏭️ Skip aplicado com regra corrigida de progresso");
 }
 
 
@@ -286,9 +292,6 @@ function changeButtons(mode) {
         if (sessionLabelImg) sessionLabelImg.src = './assets/Chip.svg';
     }
 }
-
-
-
 
 updateDisplay();
 startPauseBtn.addEventListener('click', toggleTimer);
