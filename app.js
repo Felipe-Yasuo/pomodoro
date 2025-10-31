@@ -16,7 +16,7 @@ let history = JSON.parse(localStorage.getItem('pomodoroHistory')) || [];
 let sessionType = 'focus';
 
 let completedPomodoros = 0;
-let setProgress = 0;
+let setProgress = 1;
 
 
 function updateDisplay() {
@@ -31,14 +31,11 @@ function updatePomodoroCountUI() {
 }
 
 function toggleTimer() {
-
     if (isRunning) {
-        // Pausa o timer
         clearInterval(timerInterval);
         isRunning = false;
         setPlayIcon();
     } else {
-        // Inicia o timer
         isRunning = true;
         setPauseIcon();
 
@@ -50,52 +47,63 @@ function toggleTimer() {
                 clearInterval(timerInterval);
                 isRunning = false;
 
+
                 if (sessionType === 'focus') {
                     completedPomodoros++;
-                    setProgress++;
                     addCycleToHistory(completedPomodoros);
-                    updatePomodoroCountUI();
 
-                    if (setProgress >= 5) {
 
-                        setProgress = 0;
+                    if (setProgress < 4) {
+                        setProgress++;
+                        updatePomodoroCountUI();
+
+
+                        sessionType = 'break';
+                        timeLeft = 5 * 60;
+                        changeTheme('break');
+                        changeButtons('break');
+                        setPlayIcon();
+                    } else {
+
                         sessionType = 'longBreak';
                         timeLeft = 15 * 60;
                         changeTheme('longBreak');
                         changeButtons('longBreak');
                         setPlayIcon();
 
+
                         const now = new Date();
-                        const entry = {
-                            message: 'Descanso longo iniciado',
+                        history.push({
+                            message: '☕ Descanso longo iniciado',
                             time: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
-                        };
-                        history.push(entry);
+                        });
                         saveHistory();
                         renderHistory();
-                    } else {
-                        // ☕ descanso curto normal
-                        sessionType = 'break';
-                        timeLeft = 5 * 60;
-                        changeTheme('break');
-                        changeButtons('break');
-                        setPlayIcon();
                     }
                 }
-                else {
-                    // descanso curto ou longo acabou → volta pro foco
+
+
+                else if (sessionType === 'break' || sessionType === 'longBreak') {
+                    const previousType = sessionType;
+
                     sessionType = 'focus';
                     timeLeft = 25 * 60;
                     changeTheme('focus');
                     changeButtons('focus');
                     setPlayIcon();
+
+
+                    if (previousType === 'longBreak') {
+                        setProgress = 1;
+                        updatePomodoroCountUI();
+                    }
                 }
+
                 updateDisplay();
             }
         }, 1000);
     }
 }
-
 function resetTimer() {
     clearInterval(timerInterval);
     isRunning = false;
@@ -131,9 +139,8 @@ function skipSession() {
     const mm = String(now.getMinutes()).padStart(2, '0');
 
     if (sessionType === 'focus') {
-
         completedPomodoros++;
-        setProgress++;
+
         history.push({
             icon: '✅',
             message: `${completedPomodoros}° Ciclo concluído (pulado)`,
@@ -141,26 +148,30 @@ function skipSession() {
         });
         saveHistory();
         renderHistory();
-        updatePomodoroCountUI();
 
-        if (setProgress >= 5) {
-            setProgress = 0;
-            sessionType = 'longBreak';
-            timeLeft = 15 * 60;
-            changeTheme('longBreak');
-            changeButtons('longBreak');
-            // opcional: log
-            history.push({
-                message: 'Descanso longo iniciado (pulado)',
-                time: `${hh}:${mm}`
-            });
-            saveHistory();
-            renderHistory();
-        } else {
+
+        if (setProgress < 4) {
+            setProgress++;
+            updatePomodoroCountUI();
+
+
             sessionType = 'break';
             timeLeft = 5 * 60;
             changeTheme('break');
             changeButtons('break');
+        } else {
+
+            sessionType = 'longBreak';
+            timeLeft = 15 * 60;
+            changeTheme('longBreak');
+            changeButtons('longBreak');
+
+            history.push({
+                message: '☕ Descanso longo iniciado (pulado)',
+                time: `${hh}:${mm}`
+            });
+            saveHistory();
+            renderHistory();
         }
     } else {
 
@@ -171,16 +182,25 @@ function skipSession() {
         saveHistory();
         renderHistory();
 
+
         sessionType = 'focus';
         timeLeft = 25 * 60;
         changeTheme('focus');
         changeButtons('focus');
+
+        if (sessionType === 'longBreak') {
+            setProgress = 1;
+            updatePomodoroCountUI();
+        }
     }
 
     setPlayIcon();
     updateDisplay();
-    console.log("⏭️ Skip aplicado com regra de conjunto");
+    console.log("⏭️ Skip aplicado com regra corrigida de progresso");
 }
+
+
+
 function addCycleToHistory(cycleNumber) {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
