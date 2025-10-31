@@ -106,9 +106,16 @@ function toggleTimer() {
 function resetTimer() {
     clearInterval(timerInterval);
     isRunning = false;
-    timeLeft = 25 * 60;
-    updateDisplay();
 
+    if (sessionType === 'focus') {
+        timeLeft = 25 * 60;
+    } else if (sessionType === 'break') {
+        timeLeft = 5 * 60;
+    } else if (sessionType === 'longBreak') {
+        timeLeft = 15 * 60;
+    }
+
+    updateDisplay();
     setPlayIcon();
 }
 
