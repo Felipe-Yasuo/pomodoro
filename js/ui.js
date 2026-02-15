@@ -4,6 +4,7 @@ export const dom = {
     resetBtn: document.querySelector("#resetBtn"),
     sessionLabelImg: document.querySelector("#sessionLabel img"),
     pomodoroCountEl: document.querySelector("#pomodoroCount"),
+    skipBtn: document.querySelector("#skipBtn"),
 };
 
 export function renderTime(state) {

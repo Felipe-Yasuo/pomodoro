@@ -50,3 +50,23 @@ function handleSessionEnd(state) {
 
     state.timeLeft = state.durations[state.sessionType];
 }
+
+export function skipSession(state, onTick) {
+    stopTimer(state);
+
+    if (state.sessionType === "focus") {
+        if (state.setProgress < 4) {
+            state.setProgress += 1;
+            state.sessionType = "break";
+        } else {
+            state.sessionType = "longBreak";
+            state.setProgress = 1;
+        }
+    } else {
+        state.sessionType = "focus";
+    }
+
+    state.timeLeft = state.durations[state.sessionType];
+
+    onTick();
+}

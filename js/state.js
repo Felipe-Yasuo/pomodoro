@@ -1,3 +1,5 @@
+
+// Estou testando com esses numeros
 export const state = {
     durations: {
         focus: 10,

@@ -1,6 +1,6 @@
 import { state } from "./state.js";
 import { dom, renderTime, renderSession, updateStartPauseIcon } from "./ui.js";
-import { toggleTimer, resetTimer } from "./timer.js";
+import { toggleTimer, resetTimer, skipSession } from "./timer.js";
 
 function renderAll() {
     renderTime(state);
@@ -16,4 +16,9 @@ dom.startPauseBtn.addEventListener("click", () => {
 
 dom.resetBtn.addEventListener("click", () => {
     resetTimer(state, renderAll);
+});
+
+
+dom.skipBtn.addEventListener("click", () => {
+    skipSession(state, renderAll);
 });
