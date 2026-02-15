@@ -179,6 +179,21 @@ header {
     opacity: 0.9;
 }
 
+body.break {
+    --bg-color: #D6F8D6;
+    --panel-color: #A8E6A1;
+    --text-color: #1B4D1B;
+    --button-color: #A8E6A166;
+    --clear-btn-color: #6FD96F;
+}
+
+body.longBreak {
+    --bg-color: #D6E8FF;
+    --panel-color: #A5C8FF;
+    --text-color: #142B5E;
+    --button-color: #A5C8FF66;
+    --clear-btn-color: #5A8DFF;
+}
 
 @media (max-width: 900px) {
 

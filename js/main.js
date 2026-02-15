@@ -1,11 +1,12 @@
 import { state } from "./state.js";
-import { dom, renderTime, renderSession, updateStartPauseIcon } from "./ui.js";
+import { dom, renderTime, renderSession, updateButtons, applyTheme } from "./ui.js";
 import { toggleTimer, resetTimer, skipSession } from "./timer.js";
 
 function renderAll() {
     renderTime(state);
     renderSession(state);
-    updateStartPauseIcon(state);
+    updateButtons(state);
+    applyTheme(state);
 }
 
 renderAll();

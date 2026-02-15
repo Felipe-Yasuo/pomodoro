@@ -27,15 +27,46 @@ export function renderSession(state) {
     }
 }
 
-export function updateStartPauseIcon(state) {
-    const img = dom.startPauseBtn.querySelector("img");
-    if (!img) return;
 
-    if (state.isRunning) {
-        img.src = "./assets/ButtonPause.svg";
-        img.alt = "Pausar";
-    } else {
-        img.src = "./assets/ButtonPlay.svg";
-        img.alt = "Iniciar";
+export function applyTheme(state) {
+    const body = document.body;
+
+    body.classList.remove("break", "longBreak");
+
+    if (state.sessionType === "break") {
+        body.classList.add("break");
+    } else if (state.sessionType === "longBreak") {
+        body.classList.add("longBreak");
     }
+}
+
+export function updateButtons(state) {
+    const playPauseImg = dom.startPauseBtn.querySelector("img");
+    const resetImg = dom.resetBtn.querySelector("img");
+    const skipImg = dom.skipBtn.querySelector("img");
+
+    const mode = state.sessionType;
+    const isRunning = state.isRunning;
+
+    // Define cor base do modo
+    let color = "";
+
+    if (mode === "break") color = "Green";
+    else if (mode === "longBreak") color = "Blue";
+    else color = "";
+
+    // PLAY / PAUSE
+    if (isRunning) {
+        playPauseImg.src = `./assets/ButtonPause${color}.svg`;
+        playPauseImg.alt = "Pausar";
+    } else {
+        playPauseImg.src = `./assets/ButtonPlay${color}.svg`;
+        playPauseImg.alt = "Iniciar";
+    }
+
+    // RESET
+    resetImg.src = `./assets/ButtonReset${color}.svg`;
+
+    // SKIP
+    skipImg.src = `./assets/ButtonNext${color}.svg`;
 }
