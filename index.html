@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pomodoro Timer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap"
+        rel="stylesheet" />
+
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <header class="container">
+        <h1>Pomodoro Timer</h1>
+    </header>
+
+    <main class="container main-layout">
+        <div class="timer-wrapper">
+            <section class="panel timer-panel" aria-labelledby="sessionLabel">
+                <h2 id="sessionLabel">
+                    <img src="./assets/Chip.svg" alt="" aria-hidden="true" />
+                    <span id="sessionText">Trabalho</span>
+                </h2>
+
+                <div class="timer" role="timer" aria-live="polite">
+                    <span id="time">25:00</span>
+                </div>
+
+                <div class="controls" aria-label="Controles do timer">
+                    <button id="resetBtn" type="button" aria-label="Resetar timer">
+                        <img src="./assets/ButtonReset.svg" alt="" aria-hidden="true" />
+                    </button>
+
+                    <button id="startPauseBtn" type="button" aria-label="Iniciar ou pausar">
+                        <img src="./assets/ButtonPlay.svg" alt="" aria-hidden="true" />
+                    </button>
+
+                    <button id="skipBtn" type="button" aria-label="Pular etapa">
+                        <img src="./assets/ButtonNext.svg" alt="" aria-hidden="true" />
+                    </button>
+                </div>
+
+                <div class="progress">
+                    <span id="pomodoroCount" aria-live="polite">Pomodoros: 1/4</span>
+                </div>
+            </section>
+        </div>
+
+        <aside class="panel history-panel" aria-label="Histórico de sessões">
+            <h2>Histórico</h2>
+
+            <ul id="historyList" class="history" aria-live="polite"></ul>
+
+            <div class="history-controls">
+                <button id="clearHistoryBtn" type="button" aria-label="Limpar histórico">
+                    🗑️ Limpar histórico
+                </button>
+            </div>
+        </aside>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
