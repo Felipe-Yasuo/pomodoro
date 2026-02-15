@@ -10,10 +10,10 @@ export function startTimer(state, onTick) {
             return;
         }
 
-        // chegou em 00:00
+
         stopTimer(state);
+        handleSessionEnd(state);
         onTick();
-        alert("✅ Tempo finalizado!");
     }, 1000);
 }
 
@@ -30,6 +30,23 @@ export function toggleTimer(state, onTick) {
 
 export function resetTimer(state, onTick) {
     stopTimer(state);
-    state.timeLeft = state.duration;
+    state.timeLeft = state.durations[state.sessionType];
     onTick();
+}
+
+
+function handleSessionEnd(state) {
+    if (state.sessionType === "focus") {
+        if (state.setProgress < 4) {
+            state.setProgress++;
+            state.sessionType = "break";
+        } else {
+            state.sessionType = "longBreak";
+            state.setProgress = 1;
+        }
+    } else {
+        state.sessionType = "focus";
+    }
+
+    state.timeLeft = state.durations[state.sessionType];
 }

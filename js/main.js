@@ -1,13 +1,19 @@
 import { state } from "./state.js";
-import { dom, renderTime } from "./ui.js";
+import { dom, renderTime, renderSession, updateStartPauseIcon } from "./ui.js";
 import { toggleTimer, resetTimer } from "./timer.js";
 
-renderTime(state);
+function renderAll() {
+    renderTime(state);
+    renderSession(state);
+    updateStartPauseIcon(state);
+}
+
+renderAll();
 
 dom.startPauseBtn.addEventListener("click", () => {
-    toggleTimer(state, () => renderTime(state));
+    toggleTimer(state, renderAll);
 });
 
 dom.resetBtn.addEventListener("click", () => {
-    resetTimer(state, () => renderTime(state));
+    resetTimer(state, renderAll);
 });
