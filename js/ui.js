@@ -5,6 +5,8 @@ export const dom = {
     sessionLabelImg: document.querySelector("#sessionLabel img"),
     pomodoroCountEl: document.querySelector("#pomodoroCount"),
     skipBtn: document.querySelector("#skipBtn"),
+    historyList: document.querySelector("#historyList"),
+    clearHistoryBtn: document.querySelector("#clearHistoryBtn"),
 };
 
 export function renderTime(state) {

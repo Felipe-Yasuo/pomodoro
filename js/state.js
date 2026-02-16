@@ -1,10 +1,8 @@
-
-// Estou testando com esses numeros
 export const state = {
     durations: {
-        focus: 10,
-        break: 5,
-        longBreak: 8,
+        focus: 0.1 * 60,
+        break: 0.1 * 60,
+        longBreak: 15 * 60,
     },
 
     sessionType: "focus",
@@ -14,4 +12,6 @@ export const state = {
     intervalId: null,
 
     setProgress: 1,
+
+    history: [],
 };

@@ -6,14 +6,16 @@ export function startTimer(state, onTick) {
     state.intervalId = setInterval(() => {
         if (state.timeLeft > 0) {
             state.timeLeft--;
-            onTick();
+            onTick({ type: "tick" });
             return;
         }
 
-
         stopTimer(state);
+
+        const finishedType = state.sessionType;
         handleSessionEnd(state);
-        onTick();
+
+        onTick({ type: "finished", finishedType });
     }, 1000);
 }
 
@@ -31,11 +33,11 @@ export function toggleTimer(state, onTick) {
 export function resetTimer(state, onTick) {
     stopTimer(state);
     state.timeLeft = state.durations[state.sessionType];
-    onTick();
+    onTick({ type: "reset" });
 }
 
 
-function handleSessionEnd(state) {
+export function handleSessionEnd(state) {
     if (state.sessionType === "focus") {
         if (state.setProgress < 4) {
             state.setProgress++;
@@ -54,6 +56,8 @@ function handleSessionEnd(state) {
 export function skipSession(state, onTick) {
     stopTimer(state);
 
+    const fromType = state.sessionType;
+
     if (state.sessionType === "focus") {
         if (state.setProgress < 4) {
             state.setProgress += 1;
@@ -68,5 +72,5 @@ export function skipSession(state, onTick) {
 
     state.timeLeft = state.durations[state.sessionType];
 
-    onTick();
+    onTick({ type: "skipped", fromType });
 }
