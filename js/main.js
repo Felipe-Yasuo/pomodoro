@@ -3,7 +3,7 @@ import { dom, renderTime, renderSession, updateButtons, applyTheme, updateProgre
 import { toggleTimer, resetTimer, skipSession } from "./timer.js";
 import { loadHistory, renderHistory, addHistoryEntry, clearHistory } from "./history.js";
 import { loadTimerState, saveTimerState } from "./storage.js";
-
+import { loadSettings, saveSettings, applySettingsToState } from "./settings.js";
 
 function renderAll() {
     renderTime(state);
@@ -14,7 +14,6 @@ function renderAll() {
 
     saveTimerState(state);
 }
-
 
 function onTimerEvent(evt) {
     renderAll();
@@ -60,6 +59,20 @@ function onTimerEvent(evt) {
 state.history = loadHistory();
 renderHistory(state, dom);
 
+const settings = loadSettings();
+if (settings) {
+    applySettingsToState(state, settings);
+
+    dom.focusInput.value = settings.focusMinutes;
+    dom.breakInput.value = settings.breakMinutes;
+    dom.longBreakInput.value = settings.longBreakMinutes;
+} else {
+
+    dom.focusInput.value = state.durations.focus / 60;
+    dom.breakInput.value = state.durations.break / 60;
+    dom.longBreakInput.value = state.durations.longBreak / 60;
+}
+
 const saved = loadTimerState();
 
 if (saved) {
@@ -80,6 +93,8 @@ if (saved) {
     }
 }
 
+
+
 renderAll();
 
 
@@ -97,4 +112,28 @@ dom.skipBtn.addEventListener("click", () => {
 
 dom.clearHistoryBtn.addEventListener("click", () => {
     clearHistory(state, dom, renderHistory);
+});
+
+
+dom.saveSettingsBtn.addEventListener("click", () => {
+    const focusMinutes = Number(dom.focusInput.value);
+    const breakMinutes = Number(dom.breakInput.value);
+    const longBreakMinutes = Number(dom.longBreakInput.value);
+
+    const ok =
+        Number.isFinite(focusMinutes) && focusMinutes >= 1 && focusMinutes <= 120 &&
+        Number.isFinite(breakMinutes) && breakMinutes >= 1 && breakMinutes <= 60 &&
+        Number.isFinite(longBreakMinutes) && longBreakMinutes >= 1 && longBreakMinutes <= 120;
+
+    if (!ok) {
+        alert("Valores inválidos. Verifique os minutos informados.");
+        return;
+    }
+
+    const newSettings = { focusMinutes, breakMinutes, longBreakMinutes };
+    saveSettings(newSettings);
+    applySettingsToState(state, newSettings);
+
+    renderAll();
+    addHistoryEntry(state, dom, renderHistory, "⚙️ Configurações atualizadas");
 });

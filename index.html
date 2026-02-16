@@ -57,6 +57,30 @@
             </section>
         </div>
 
+        <div class="settings" aria-label="Configurações do pomodoro">
+            <h3>Configurações</h3>
+
+            <div class="settings-grid">
+                <label>
+                    Foco (min)
+                    <input id="focusInput" type="number" min="1" max="120" value="25" />
+                </label>
+
+                <label>
+                    Pausa (min)
+                    <input id="breakInput" type="number" min="1" max="60" value="5" />
+                </label>
+
+                <label>
+                    Pausa longa (min)
+                    <input id="longBreakInput" type="number" min="1" max="120" value="15" />
+                </label>
+            </div>
+
+            <button id="saveSettingsBtn" type="button">💾 Salvar</button>
+        </div>
+
+
         <aside class="panel history-panel" aria-label="Histórico de sessões">
             <h2>Histórico</h2>
 

@@ -8,6 +8,11 @@ export const dom = {
     historyList: document.querySelector("#historyList"),
     clearHistoryBtn: document.querySelector("#clearHistoryBtn"),
     progressCircle: document.querySelector(".progress-circle"),
+    focusInput: document.querySelector("#focusInput"),
+    breakInput: document.querySelector("#breakInput"),
+    longBreakInput: document.querySelector("#longBreakInput"),
+    saveSettingsBtn: document.querySelector("#saveSettingsBtn"),
+
 };
 
 export function renderTime(state) {
