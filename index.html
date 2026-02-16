@@ -26,8 +26,15 @@
                     <img src="./assets/Chip.svg" alt="" aria-hidden="true" />
                 </h2>
 
-                <div class="timer" role="timer" aria-live="polite">
-                    <span id="time">25:00</span>
+                <div class="timer-container">
+                    <svg class="progress-ring" width="260" height="260">
+                        <circle class="progress-bg" cx="130" cy="130" r="110" />
+                        <circle class="progress-circle" cx="130" cy="130" r="110" />
+                    </svg>
+
+                    <div class="timer" role="timer" aria-live="polite">
+                        <span id="time">25:00</span>
+                    </div>
                 </div>
 
                 <div class="controls" aria-label="Controles do timer">

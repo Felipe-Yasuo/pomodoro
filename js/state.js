@@ -1,7 +1,7 @@
 export const state = {
     durations: {
-        focus: 0.1 * 60,
-        break: 0.1 * 60,
+        focus: 25 * 60,
+        break: 5 * 60,
         longBreak: 15 * 60,
     },
 

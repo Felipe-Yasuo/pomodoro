@@ -1,5 +1,5 @@
 import { state } from "./state.js";
-import { dom, renderTime, renderSession, updateButtons, applyTheme } from "./ui.js";
+import { dom, renderTime, renderSession, updateButtons, applyTheme, updateProgressCircle } from "./ui.js";
 import { toggleTimer, resetTimer, skipSession } from "./timer.js";
 import { loadHistory, renderHistory, addHistoryEntry, clearHistory } from "./history.js";
 
@@ -8,6 +8,7 @@ function renderAll() {
     renderSession(state);
     updateButtons(state);
     applyTheme(state);
+    updateProgressCircle(state);
 }
 
 renderAll();

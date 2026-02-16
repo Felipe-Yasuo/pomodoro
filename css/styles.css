@@ -15,6 +15,23 @@
 }
 
 
+body.break {
+    --bg-color: #D6F8D6;
+    --panel-color: #A8E6A1;
+    --text-color: #1B4D1B;
+    --button-color: #A8E6A166;
+    --clear-btn-color: #6FD96F;
+}
+
+body.longBreak {
+    --bg-color: #D6E8FF;
+    --panel-color: #A5C8FF;
+    --text-color: #142B5E;
+    --button-color: #A5C8FF66;
+    --clear-btn-color: #5A8DFF;
+}
+
+
 
 body {
     font-family: "Roboto Flex", sans-serif;
@@ -23,6 +40,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    transition: background-color 0.35s ease, color 0.35s ease;
 }
 
 
@@ -56,27 +74,36 @@ header {
     align-items: center;
 }
 
-
-
 .timer-panel {
     background: var(--panel-color);
     border-radius: 20px;
-    padding: 40px;
+    padding: 32px 40px;
     width: 500px;
-    height: 500px;
+
+    min-height: 520px;
+    height: auto;
+
     text-align: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
+    gap: 18px;
 }
 
+
+
+.timer-panel,
+.history-panel {
+    transition: background-color 0.35s ease, box-shadow 0.35s ease;
+}
 
 
 .timer {
     font-weight: 800;
     font-size: clamp(3.5rem, 10vw, 7rem);
-    margin: 50px 0;
+    margin: 0;
 }
 
 
@@ -113,9 +140,12 @@ header {
 
 
 .progress {
+    margin-top: auto;
+    padding-top: 8px;
     font-size: clamp(1.2rem, 2.5vw, 2rem);
     font-weight: 600;
 }
+
 
 
 .history-panel {
@@ -179,21 +209,48 @@ header {
     opacity: 0.9;
 }
 
-body.break {
-    --bg-color: #D6F8D6;
-    --panel-color: #A8E6A1;
-    --text-color: #1B4D1B;
-    --button-color: #A8E6A166;
-    --clear-btn-color: #6FD96F;
+
+.timer-container {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    margin: 6px 0 0;
 }
 
-body.longBreak {
-    --bg-color: #D6E8FF;
-    --panel-color: #A5C8FF;
-    --text-color: #142B5E;
-    --button-color: #A5C8FF66;
-    --clear-btn-color: #5A8DFF;
+
+.progress-ring {
+    transform: rotate(-90deg);
+    display: block;
+    margin: 0 auto;
 }
+
+
+.progress-bg {
+    fill: none;
+    stroke: rgba(0, 0, 0, 0.10);
+    stroke-width: 12;
+}
+
+
+.progress-circle {
+    fill: none;
+    stroke: var(--text-color);
+    stroke-width: 12;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.25s linear, stroke 0.25s ease;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.18));
+}
+
+.timer-container .timer {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    font-size: clamp(2.8rem, 6vw, 4.2rem);
+    margin-bottom: 15px;
+}
+
 
 @media (max-width: 900px) {
 

@@ -7,6 +7,7 @@ export const dom = {
     skipBtn: document.querySelector("#skipBtn"),
     historyList: document.querySelector("#historyList"),
     clearHistoryBtn: document.querySelector("#clearHistoryBtn"),
+    progressCircle: document.querySelector(".progress-circle"),
 };
 
 export function renderTime(state) {
@@ -71,4 +72,17 @@ export function updateButtons(state) {
 
     // SKIP
     skipImg.src = `./assets/ButtonNext${color}.svg`;
+}
+
+export function updateProgressCircle(state) {
+    const radius = 110;
+    const circumference = 2 * Math.PI * radius;
+
+    const total = state.durations[state.sessionType];
+    const progress = state.timeLeft / total;
+
+    const offset = circumference * (1 - progress);
+
+    dom.progressCircle.style.strokeDasharray = circumference;
+    dom.progressCircle.style.strokeDashoffset = offset;
 }
