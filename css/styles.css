@@ -184,7 +184,6 @@ header {
     overflow-y: auto;
 
     padding-right: 6px;
-    /
 }
 
 .history::-webkit-scrollbar {
@@ -350,34 +349,64 @@ header {
 }
 
 @media (max-width: 900px) {
-    .settings-grid {
-        grid-template-columns: 1fr;
+    .container {
+        width: 100%;
+        padding: 0 16px;
+        margin: 0;
     }
-}
 
-
-
-@media (max-width: 900px) {
+    header.container {
+        text-align: center;
+    }
 
     .main-layout {
         grid-template-columns: 1fr;
         height: auto;
+        gap: 16px;
     }
 
     .timer-wrapper {
         grid-column: 1;
     }
 
-    .history-panel {
+    .right-column {
         grid-column: 1;
-        justify-self: center;
         width: min(500px, 92vw);
-        max-height: unset;
-        margin-top: 20px;
+        justify-self: center;
+        align-self: start;
+    }
+
+    .settings-panel,
+    .history-panel {
+        width: 100%;
+    }
+}
+
+
+@media (max-width: 430px) {
+
+
+    header {
+        padding: 18px 0;
+        font-size: 1.4rem;
     }
 
     .timer-panel {
-        width: min(500px, 92vw);
-        height: auto;
+        padding: 22px 18px;
+        min-height: unset;
+    }
+
+    .timer-container {
+        width: 240px;
+        height: 240px;
+    }
+
+    .controls {
+        gap: 18px;
+    }
+
+    .controls button img {
+        width: 64px;
+        height: 64px;
     }
 }
