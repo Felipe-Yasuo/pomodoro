@@ -27,8 +27,13 @@ export function stopTimer(state) {
 }
 
 export function toggleTimer(state, onTick) {
-    if (state.isRunning) stopTimer(state);
-    else startTimer(state, onTick);
+    if (state.isRunning) {
+        stopTimer(state);
+    } else {
+        startTimer(state, onTick);
+    }
+
+    onTick();
 }
 
 export function resetTimer(state, onTick) {
