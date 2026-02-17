@@ -20,34 +20,35 @@ function onTimerEvent(evt) {
     if (!evt) return;
 
     if (evt.type === "finished") {
-        const label =
-            evt.finishedType === "focus"
-                ? "✅ Foco concluído"
-                : evt.finishedType === "break"
-                    ? "☕ Pausa concluída"
-                    : "🌙 Pausa longa concluída";
+        if (evt.finishedType === "focus") {
+            addHistoryEntry(state, dom, renderHistory, `✅ Pomodoro ${evt.pomodoroNumber}/4 concluído`);
 
-        addHistoryEntry(state, dom, renderHistory, label);
-
+            if (evt.completedCycle) {
+                addHistoryEntry(state, dom, renderHistory, "🏁 Ciclo completo! (4/4)");
+            }
+        } else if (evt.finishedType === "break") {
+            addHistoryEntry(state, dom, renderHistory, `☕ Pausa curta (após Pomodoro ${evt.afterPomodoro}) concluída`);
+        } else {
+            addHistoryEntry(state, dom, renderHistory, "🌙 Pausa longa concluída");
+        }
         const started =
-            state.sessionType === "focus"
-                ? "🎯 Novo foco iniciado"
-                : state.sessionType === "break"
-                    ? "☕ Pausa iniciada"
+            evt.nextType === "focus"
+                ? "🎯 Foco iniciado"
+                : evt.nextType === "break"
+                    ? "☕ Pausa curta iniciada"
                     : "🌙 Pausa longa iniciada";
 
         addHistoryEntry(state, dom, renderHistory, started);
     }
 
     if (evt.type === "skipped") {
-        const from =
-            evt.fromType === "focus"
-                ? "⏭️ Foco pulado"
-                : evt.fromType === "break"
-                    ? "⏭️ Pausa pulada"
-                    : "⏭️ Pausa longa pulada";
-
-        addHistoryEntry(state, dom, renderHistory, from);
+        if (evt.fromType === "focus") {
+            addHistoryEntry(state, dom, renderHistory, `⏭️ Pomodoro ${evt.pomodoroNumber}/4 pulado`);
+        } else if (evt.fromType === "break") {
+            addHistoryEntry(state, dom, renderHistory, `⏭️ Pausa curta (após Pomodoro ${evt.afterPomodoro}) pulada`);
+        } else {
+            addHistoryEntry(state, dom, renderHistory, "⏭️ Pausa longa pulada");
+        }
     }
 
     if (evt.type === "reset") {
@@ -87,6 +88,7 @@ if (saved) {
         const elapsedSeconds = Math.floor((Date.now() - saved.savedAt) / 1000);
         state.timeLeft = Math.max(0, state.timeLeft - elapsedSeconds);
 
+        renderAll();
         if (state.timeLeft > 0) {
             toggleTimer(state, onTimerEvent);
         }
@@ -95,7 +97,7 @@ if (saved) {
 
 
 
-renderAll();
+
 
 
 dom.startPauseBtn.addEventListener("click", () => {

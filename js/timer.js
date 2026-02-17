@@ -12,11 +12,17 @@ export function startTimer(state, onTick) {
 
         stopTimer(state);
 
-        const finishedType = state.sessionType;
 
-        handleSessionEnd(state);
+        const result = transitionSession(state, { reason: "finished" });
 
-        onTick({ type: "finished", finishedType });
+        onTick({
+            type: "finished",
+            finishedType: result.fromType,
+            nextType: result.toType,
+            pomodoroNumber: result.pomodoroNumber,
+            afterPomodoro: result.afterPomodoro,
+            completedCycle: result.completedCycle,
+        });
     }, 1000);
 }
 
@@ -29,11 +35,11 @@ export function stopTimer(state) {
 export function toggleTimer(state, onTick) {
     if (state.isRunning) {
         stopTimer(state);
+        onTick();
     } else {
         startTimer(state, onTick);
+        onTick();
     }
-
-    onTick();
 }
 
 export function resetTimer(state, onTick) {
@@ -42,9 +48,23 @@ export function resetTimer(state, onTick) {
     onTick({ type: "reset" });
 }
 
-
-function transitionSession(state) {
+export function transitionSession(state, { reason }) {
     const fromType = state.sessionType;
+
+    let pomodoroNumber = null;
+    let afterPomodoro = null;
+    let completedCycle = false;
+
+    if (fromType === "focus") {
+        pomodoroNumber = state.setProgress;
+        completedCycle = pomodoroNumber === 4;
+    } else if (fromType === "break") {
+        afterPomodoro = state.setProgress - 1;
+    } else if (fromType === "longBreak") {
+        afterPomodoro = 4;
+    }
+
+
     let toType = fromType;
 
     if (fromType === "focus") {
@@ -62,17 +82,30 @@ function transitionSession(state) {
     state.sessionType = toType;
     state.timeLeft = state.durations[toType];
 
-    return { fromType, toType };
+    return {
+        reason,
+        fromType,
+        toType,
+        pomodoroNumber,
+        afterPomodoro,
+        completedCycle,
+    };
 }
 
 export function handleSessionEnd(state) {
-    transitionSession(state);
+    transitionSession(state, { reason: "finished" });
 }
 
 export function skipSession(state, onTick) {
     stopTimer(state);
 
-    const { fromType } = transitionSession(state);
+    const result = transitionSession(state, { reason: "skipped" });
 
-    onTick({ type: "skipped", fromType });
+    onTick({
+        type: "skipped",
+        fromType: result.fromType,
+        toType: result.toType,
+        pomodoroNumber: result.pomodoroNumber,
+        afterPomodoro: result.afterPomodoro,
+    });
 }
