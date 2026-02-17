@@ -13,6 +13,7 @@ export function startTimer(state, onTick) {
         stopTimer(state);
 
         const finishedType = state.sessionType;
+
         handleSessionEnd(state);
 
         onTick({ type: "finished", finishedType });
@@ -37,40 +38,36 @@ export function resetTimer(state, onTick) {
 }
 
 
-export function handleSessionEnd(state) {
-    if (state.sessionType === "focus") {
+function transitionSession(state) {
+    const fromType = state.sessionType;
+    let toType = fromType;
+
+    if (fromType === "focus") {
         if (state.setProgress < 4) {
-            state.setProgress++;
-            state.sessionType = "break";
+            state.setProgress += 1;
+            toType = "break";
         } else {
-            state.sessionType = "longBreak";
             state.setProgress = 1;
+            toType = "longBreak";
         }
     } else {
-        state.sessionType = "focus";
+        toType = "focus";
     }
 
-    state.timeLeft = state.durations[state.sessionType];
+    state.sessionType = toType;
+    state.timeLeft = state.durations[toType];
+
+    return { fromType, toType };
+}
+
+export function handleSessionEnd(state) {
+    transitionSession(state);
 }
 
 export function skipSession(state, onTick) {
     stopTimer(state);
 
-    const fromType = state.sessionType;
-
-    if (state.sessionType === "focus") {
-        if (state.setProgress < 4) {
-            state.setProgress += 1;
-            state.sessionType = "break";
-        } else {
-            state.sessionType = "longBreak";
-            state.setProgress = 1;
-        }
-    } else {
-        state.sessionType = "focus";
-    }
-
-    state.timeLeft = state.durations[state.sessionType];
+    const { fromType } = transitionSession(state);
 
     onTick({ type: "skipped", fromType });
 }
